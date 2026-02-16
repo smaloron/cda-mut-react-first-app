@@ -1,4 +1,4 @@
-function TodoItem({ item, toggleDone }) {
+function TodoItem({ item, toggleDone, deleteTodo }) {
 
     const handleChange = () => {
         toggleDone(item.id);
@@ -8,6 +8,7 @@ function TodoItem({ item, toggleDone }) {
         <div>
             <input type="checkbox" onChange={handleChange} checked={item.done} />
             <label htmlFor={item.id}>{item.title}</label>
+            <button onClick={()=> deleteTodo(item.id)}>X</button>
         </div>
     )
 }
