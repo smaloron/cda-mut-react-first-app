@@ -1,15 +1,39 @@
 import { useForm } from 'react-hook-form';
+import {useEffect, useState} from "react";
 
 
 function PersonForm() {
+
+    const [person, setPerson] = useState({
+        name: 'a',
+        age: 0,
+    });
+
+    useEffect(() => {
+        // Simulation d'un appel API
+        const timer= setTimeout(() => {
+            setPerson({
+                name: 'Sabrina',
+                age: 34,
+            });
+        }, 2000)
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, []);
+
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        values: person,
+    });
 
     const onSuccess = (data) => {
         console.log(data)
+        setPerson(data);
     }
 
     const onError = (error) => {
