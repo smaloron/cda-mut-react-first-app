@@ -1,5 +1,5 @@
 import {useState} from "react";
-import TodoList from "./TodoList.jsx";
+import TodoList from "../components/TodoList.jsx";
 
 // Constante pour les états du filtre
 const FILTERS = {

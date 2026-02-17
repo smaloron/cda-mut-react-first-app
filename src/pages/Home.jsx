@@ -1,6 +1,6 @@
 import logo from "../../public/vite.svg";
-import Adults from "./Adults.jsx";
-import Children from "./Children.jsx";
+import Adults from "../components/Adults.jsx";
+import Children from "../components/Children.jsx";
 
 
 function Home(){

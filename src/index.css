@@ -3,3 +3,7 @@
 :root {
     --pico-font-family: verdana, arial, helvetica, sans-serif;
 }
+
+nav {
+    margin-bottom: 20px;
+}
