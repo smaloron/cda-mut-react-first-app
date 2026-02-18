@@ -6,6 +6,7 @@ import PersonForm from "./pages/PersonForm.jsx";
 import Home from "./pages/Home.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import Quiz from "./quiz/Quiz.jsx";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/app"  element={<AppLayout/>} >
                 <Route path="todo-list"  element={<TodoApp/>} />
                 <Route path="person-form"  element={<PersonForm/>} />
+                <Route path="quiz" element={<Quiz/>} />
             </Route>
             <Route path="/product-details/:id" exact element={<ProductDetails/>} />
             <Route path="*" element={<NotFoundPage/>} />

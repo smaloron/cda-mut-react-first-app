@@ -13,6 +13,7 @@ function AppLayout(){
             <nav>
                     <Link to="/app/todo-list">Liste des tâches</Link>
                     <Link to="/app/person-form">Formulaire</Link>
+                    <Link to="/app/quiz">Quiz</Link>
             </nav>
 
             <div>
