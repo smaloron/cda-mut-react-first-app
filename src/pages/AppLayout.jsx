@@ -14,6 +14,7 @@ function AppLayout(){
                     <Link to="/app/todo-list">Liste des tâches</Link>
                     <Link to="/app/person-form">Formulaire</Link>
                     <Link to="/app/quiz">Quiz</Link>
+                    <Link to="/app/booklist">Liste des livres</Link>
             </nav>
 
             <div>
