@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function LoginPage({onLogin}) {
     const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ function LoginPage({onLogin}) {
 
         try {
             await onLogin(email, password);
-            navigate('/quiz');
+            navigate('/app/quiz');
         } catch (error) {
             setError(error.message);
         }
@@ -24,6 +24,8 @@ function LoginPage({onLogin}) {
         <div>
             <h3>Connexion</h3>
 
+            {error && <p style={{color: "red"}}>{error}</p>}
+
             <form onSubmit={handleSubmit}>
                 <label>Email
                     <input type="email"
@@ -32,7 +34,7 @@ function LoginPage({onLogin}) {
                            required
                            placeholder="Enter email"/>
                 </label>
-                <label>Email
+                <label>Mot de passe
                     <input type="password"
                            value={password}
                            onChange={(e) => setPassword(e.target.value)}
@@ -42,6 +44,10 @@ function LoginPage({onLogin}) {
 
                 <button type="submit">Login</button>
             </form>
+
+            <div style={{marginTop: '1.5rem'}}>
+                Pas encore inscrit ? <Link to="/register">Cliquez ici</Link>
+            </div>
 
         </div>
     )

@@ -17,15 +17,15 @@ function App() {
     const [user, setUser] = useState(null);
 
     const handleLogin = async (email, password) => {
-        const user = await authApi.login(email, password);
-        localStorage.setItem("token", user.token);
-        setUser(user);
+        const data = await authApi.login(email, password);
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
     }
 
     const handleRegister = async (email, password, name) => {
-        const user = await authApi.register(email, password, name);
-        localStorage.setItem("token", user.token);
-        setUser(user);
+        const data = await authApi.register(email, password, name);
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
     }
 
     const handleLogout =  () => {
@@ -33,13 +33,13 @@ function App() {
         setUser(null);
     }
 
-    const authRoutes = user ? (<div></div>):(<Link to="/login"/>);
 
   return (
     <main className="container">
-
+        {user && <h3>Vous êtes connecté en tant que : {user.name}</h3>}
         <nav>
-            <Link to="/login">Connexion </Link>
+            {user && <button onClick={handleLogout} className="outline">Logout</button>}
+            {!user && <Link to="/login">Connexion </Link>}
         </nav>
 
         <nav>
