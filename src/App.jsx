@@ -12,6 +12,7 @@ import {useState} from "react";
 
 import {authApi} from "./services/api";
 import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -50,6 +51,7 @@ function App() {
         <Routes>
             <Route path="/" exact element={<Home/>} />
             <Route path="/login" exact element={<LoginPage onLogin={handleLogin} />} />
+            <Route path="/register" exact element={<RegisterPage onRegister={handleRegister} />} />
             <Route path="/app"  element={<AppLayout/>} >
                 <Route path="todo-list"  element={<TodoApp/>} />
                 <Route path="person-form"  element={<PersonForm/>} />
