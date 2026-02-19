@@ -1,8 +1,9 @@
+import useQuizStore from "../stores/useQuizStore.js";
+
 function Results({ userAnswers, onRestart, quizData }) {
-    const score = quizData.reduce(
-        (acc, q) => acc + (userAnswers[q.id] === q.correctAnswer ? 1 : 0),
-        0
-    );
+    const {getScore} = useQuizStore((s)=> s.getScore);
+
+    const score = getScore();
     const percentage = Math.round((score / quizData.length) * 100);
     const stars = "★".repeat(Math.ceil(percentage / 20));
 

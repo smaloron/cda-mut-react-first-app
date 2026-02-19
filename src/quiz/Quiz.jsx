@@ -1,26 +1,28 @@
 import Question from "./Question.jsx";
-import {useCallback, useState} from "react";
 import Navigation from "./Navigation.jsx";
 import Results from "./Results.jsx";
 
 import './quiz.css';
-import {quizApi} from "../services/api.js";
-import useGenericApi from "../hooks/useGenericApi.js";
+import useQuizStore from "../stores/useQuizStore.js";
+import {useEffect} from "react";
 
 
 
 function Quiz() {
 
-    const quizCallback = useCallback(()=> quizApi.getAll(), []);
-    const [quizData, loading, error]= useGenericApi(quizCallback);
+    const {
+        quizData, loading, error,
+        userAnswers, currentQuestionIndex, isFinished,
+        fetchQuiz, setAnswer, next, previous, restart
+    } = useQuizStore();
 
-    const [userAnswers, setUserAnswers] = useState({});
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [isFinished, setIsFinished] = useState(false);
+    useEffect(() => {
+        fetchQuiz();
+    }, [fetchQuiz]);
 
     if(loading) return <main aria-busy="busy">Chargement des données...</main>;
     if(error) return <main aria-errormessage={error}>Error!</main>;
-    if(!quizData && quizData.length === 0) return <main>Aucune question disponible</main>;
+    if(!quizData || (quizData && quizData.length === 0)) return <main>Aucune question disponible</main>;
 
     const currentQuestion = quizData[currentQuestionIndex];
     const isFirstQuestion = currentQuestionIndex === 0;
@@ -28,34 +30,8 @@ function Quiz() {
     const hasAnswer = currentQuestion.id in userAnswers;
 
 
-    const handleQuestionAnswer = (questionId, selectedOption) => {
-        setUserAnswers((prevState) => ({
-            ...prevState, [questionId]: selectedOption
-        }))
-    }
-
-    const handleNext = () => {
-        if (isLastQuestion) {
-            setIsFinished(true);
-        } else {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-        }
-    }
-
-    const handlePrevious = () => {
-        if (!isFirstQuestion) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
-        }
-    }
-
-    const handleRestart = () => {
-        setUserAnswers({});
-        setCurrentQuestionIndex(0);
-        setIsFinished(false);
-    }
-
     const results = isFinished && (
-        <Results userAnswers={userAnswers} onRestart={handleRestart} quizData={quizData} />
+        <Results  onRestart={restart} />
     );
 
     const questions = !isFinished && (
@@ -64,12 +40,12 @@ function Quiz() {
             <ProgressBar current={currentQuestionIndex} total={quizData.length} />
 
             <Question data={currentQuestion}
-                      onAnswer={handleQuestionAnswer}
+                      onAnswer={setAnswer}
                       selectedAnswer={userAnswers[currentQuestion.id]}/>
 
 
-            <Navigation onNext={handleNext}
-                        onPrev={handlePrevious}
+            <Navigation onNext={next()}
+                        onPrev={previous()}
                         hasAnswer={hasAnswer}
                         isLast={isLastQuestion}
                         isFirst={isFirstQuestion}/>
