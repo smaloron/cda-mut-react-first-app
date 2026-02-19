@@ -34,3 +34,7 @@ export const authApi = {
     verify: () => api.get('/auth/verify'),
 
 };
+
+export const quizApi = {
+    getAll: null
+};
