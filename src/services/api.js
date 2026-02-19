@@ -36,5 +36,5 @@ export const authApi = {
 };
 
 export const quizApi = {
-    getAll: null
+    getAll: () => api.get('/quiz'),
 };

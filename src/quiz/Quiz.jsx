@@ -1,42 +1,26 @@
 import Question from "./Question.jsx";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import Navigation from "./Navigation.jsx";
 import Results from "./Results.jsx";
 
 import './quiz.css';
+import {quizApi} from "../services/api.js";
+import useGenericApi from "../hooks/useGenericApi.js";
 
 
-const quizData = [
-    {
-        id: 1,
-        question: "Quelle est la capitale de la France ?",
-        options: ["Paris", "Lyon", "Marseille", "Toulouse"],
-        correctAnswer: 0
-    },
-    {
-        id: 2,
-        question: "Combien font 5 + 7 ?",
-        options: ["10", "11", "12", "13"],
-        correctAnswer: 2
-    },
-    {
-        id: 3,
-        question: "Quel est le langage de programmation créé par Facebook ?",
-        options: ["Vue", "Angular", "React", "Svelte"],
-        correctAnswer: 2
-    },
-    {
-        id: 4,
-        question: "En quelle année a été créé JavaScript ?",
-        options: ["1995", "2000", "2005", "2010"],
-        correctAnswer: 0
-    }
-];
 
 function Quiz() {
+
+    const quizCallback = useCallback(()=> quizApi.getAll(), []);
+    const [quizData, loading, error]= useGenericApi(quizCallback);
+
     const [userAnswers, setUserAnswers] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+
+    if(loading) return <main aria-busy="busy">Chargement des données...</main>;
+    if(error) return <main aria-errormessage={error}>Error!</main>;
+    if(!quizData && quizData.length === 0) return <main>Aucune question disponible</main>;
 
     const currentQuestion = quizData[currentQuestionIndex];
     const isFirstQuestion = currentQuestionIndex === 0;
