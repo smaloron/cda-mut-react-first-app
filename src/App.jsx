@@ -8,7 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Quiz from "./quiz/Quiz.jsx";
 import BookList from "./pages/BookList.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import {authApi} from "./services/api";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -16,6 +16,22 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 
 function App() {
     const [user, setUser] = useState(null);
+
+    //Vérification du token au montage du composant
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(!token) return;
+
+        authApi .verify()
+                .then((res)=> {
+                    console.log(res);
+                    setUser(res.user)
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    localStorage.removeItem("token")
+                });
+    }, []);
 
     const handleLogin = async (email, password) => {
         const data = await authApi.login(email, password);

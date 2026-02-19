@@ -31,6 +31,6 @@ export default api;
 export const authApi = {
     login: (email, password) => api.post('/auth/login', {email, password}),
     register: (email, password, name) => api.post('/auth/register', {email, password, name}),
-    verify: () => api.get('/auth/verify', {email, password}),
+    verify: () => api.get('/auth/verify'),
 
 };
