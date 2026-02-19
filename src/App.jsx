@@ -13,6 +13,7 @@ import {useEffect, useState} from "react";
 import {authApi} from "./services/api";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -69,9 +70,15 @@ function App() {
             <Route path="/login" exact element={<LoginPage onLogin={handleLogin} />} />
             <Route path="/register" exact element={<RegisterPage onRegister={handleRegister} />} />
             <Route path="/app"  element={<AppLayout/>} >
-                <Route path="todo-list"  element={<TodoApp/>} />
+
                 <Route path="person-form"  element={<PersonForm/>} />
-                <Route path="quiz" element={<Quiz/>} />
+
+                <Route path="quiz" element={
+                    <ProtectedRoute user={user}><Quiz/></ProtectedRoute>
+                } />
+                <Route path="todo-list"  element={<TodoApp/>} />
+
+
                 <Route path="booklist" element={<BookList/>} />
             </Route>
             <Route path="/product-details/:id" exact element={<ProductDetails/>} />
