@@ -1,10 +1,13 @@
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import useAuthStore from "../stores/useAuthStore.js";
 
-function LoginPage({onLogin}) {
+function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
+    const login= useAuthStore((state) => state.login);
 
     const navigate = useNavigate();
 
@@ -13,7 +16,7 @@ function LoginPage({onLogin}) {
         setError('');
 
         try {
-            await onLogin(email, password);
+            await login(email, password);
             navigate('/app/quiz');
         } catch (error) {
             setError(error.message);

@@ -8,55 +8,31 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Quiz from "./quiz/Quiz.jsx";
 import BookList from "./pages/BookList.jsx";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
-import {authApi} from "./services/api";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import useAuthStore from "./stores/useAuthStore.js";
 
 function App() {
-    const [user, setUser] = useState(null);
+    const init = useAuthStore((state) => {state.init});
+    const user = useAuthStore((state) => state.user);
+    const logout = useAuthStore((state) => state.logout);
 
     //Vérification du token au montage du composant
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if(!token) return;
+        init();
+    }, [init]);
 
-        authApi .verify()
-                .then((res)=> {
-                    console.log(res);
-                    setUser(res.user)
-                })
-                .catch((err)=>{
-                    console.log(err);
-                    localStorage.removeItem("token")
-                });
-    }, []);
 
-    const handleLogin = async (email, password) => {
-        const data = await authApi.login(email, password);
-        localStorage.setItem("token", data.token);
-        setUser(data.user);
-    }
-
-    const handleRegister = async (email, password, name) => {
-        const data = await authApi.register(email, password, name);
-        localStorage.setItem("token", data.token);
-        setUser(data.user);
-    }
-
-    const handleLogout =  () => {
-        localStorage.removeItem("token");
-        setUser(null);
-    }
 
 
   return (
     <main className="container">
         {user && <h3>Vous êtes connecté en tant que : {user.name}</h3>}
         <nav>
-            {user && <button onClick={handleLogout} className="outline">Logout</button>}
+            {user && <button onClick={logout} className="outline">Logout</button>}
             {!user && <Link to="/login">Connexion </Link>}
         </nav>
 
@@ -67,14 +43,14 @@ function App() {
 
         <Routes>
             <Route path="/" exact element={<Home/>} />
-            <Route path="/login" exact element={<LoginPage onLogin={handleLogin} />} />
-            <Route path="/register" exact element={<RegisterPage onRegister={handleRegister} />} />
+            <Route path="/login" exact element={<LoginPage />} />
+            <Route path="/register" exact element={<RegisterPage />} />
             <Route path="/app"  element={<AppLayout/>} >
 
                 <Route path="person-form"  element={<PersonForm/>} />
 
                 <Route path="quiz" element={
-                    <ProtectedRoute user={user}><Quiz/></ProtectedRoute>
+                    <ProtectedRoute><Quiz/></ProtectedRoute>
                 } />
                 <Route path="todo-list"  element={<TodoApp/>} />
 

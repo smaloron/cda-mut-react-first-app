@@ -1,9 +1,12 @@
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import useAuthStore from "../stores/useAuthStore.js";
 
-function RegisterPage({onRegister}) {
+function RegisterPage() {
     const [serverError, setServerError] = useState(null);
+
+    const userRegister = useAuthStore((state) => state.register);
 
     const initialFormValuse = {
         email: '',
@@ -19,7 +22,7 @@ function RegisterPage({onRegister}) {
     const onSubmit = async ({email, password, name}) => {
 
         try {
-            await onRegister(email, password, name);
+            await userRegister(email, password, name);
             navigate("/app/quiz");
         } catch (error) {
             setServerError(error);
